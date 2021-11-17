@@ -9,6 +9,9 @@ int INDORELED2 = 12;
 int INDORELED3 = 11;
 int INDORELED4 = 8;
 
+int sensorPin = 0;
+
+
 void setup() {
    pinMode(LED1,OUTPUT);
   // pinMode(LED2,OUTPUT);
@@ -21,6 +24,9 @@ void setup() {
   //pinMode(INDORELED3,OUTPUT);
   //pinMode(INDORELED4,OUTPUT);
   Serial.begin(9600);
+
+  Serial.begin(9600);
+
 
  
    
@@ -70,4 +76,19 @@ void loop(){
       //digitalWrite(INDORELED3,1);
       //digitalWrite(INDORELED4,0);
   }
+ 
+ int reading = analogRead(sensorPin);
+ // measure the 5v with a meter for an accurate value
+ //In particular if your Arduino is USB powered
+ float voltage = reading * 4.68;
+ voltage /= 1024.0;
+ 
+ // now print out the temperature
+ float temperatureC = (voltage - 0.5) * 100;
+ Serial.print(temperatureC);
+ Serial.println(" degrees C");
+ 
+ delay(1000);
+
 }
+
