@@ -18,10 +18,8 @@ void setup() {
    pinMode(LED3,OUTPUT);
    pinMode(LED4,OUTPUT);
    Serial.begin(9600); // start serial
-   //lampOn();
    
- 
-   
+   temp();
 while (!Serial) {
     ; // wait for serial port to connect.
   }
@@ -29,37 +27,40 @@ while (!Serial) {
 }
 void loop(){
  String readString;
-// lampOn();
-   //alarmoff();
-    //    alarmOn();
+ 
   while (Serial.available()) {
     char c = Serial.read();  // reads input from serial 
     readString += c; // adds to string 
     delay(2);  //slow looping to allow buffer to fill with next character
   }// depends on the command turn the led on, or off
   if (readString.length() >0) {
+    Serial.print(readString);
     if(readString == "on"){
       lampOn();
     }else if(readString == "off"){
-      digitalWrite(LED1,1);
-    digitalWrite(LED2, 1);
-    digitalWrite(LED3,1);
-    digitalWrite(LED4,1);
+     lampOff();
     
   }else if(readString=="insideOn"){
       indoorOn();
     }else if (readString =="insideOff"){
       indoorOff();
   }else if(readString=="temperature"){
-    temp();
-  }else if(readString="alarmOn"){
+  }else if(readString=="alarmOn"){
     alarmOn();
-  }else if (readString="alarmOff"){
+  }else if (readString=="alarmOff"){
     alarmoff();
-  }else if(readString="fan"){
+  }else if(readString=="High"){
     fan();
+  }else if (readString=="Medium"){
+    fanMedium();
+  }else if(readString=="Low"){
+    fanLow();
+  }else if (readString=="Off")
+  fanOff();
   }
-  }
+      temp();
+      delay(100);
+
 }
 
 
@@ -85,6 +86,13 @@ void loop(){
     digitalWrite(LED2,0);//12
     digitalWrite(LED3,1);//11
     digitalWrite(LED4,1);//8
+  }
+
+  void lampOff(){
+     digitalWrite(LED1,1);
+    digitalWrite(LED2, 1);
+    digitalWrite(LED3,1);
+    digitalWrite(LED4,1);
   }
   void alarmOn(){
     //below is alarm sound
@@ -121,5 +129,16 @@ void loop(){
 
   void fan(){
      analogWrite(10,255);
+  }
 
+  void fanMedium(){
+    analogWrite(10,127);
+  }
+
+  void fanOff(){
+    analogWrite(10,0);
+  }
+
+  void fanLow(){
+    analogWrite(10,90);
   }
