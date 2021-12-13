@@ -9,7 +9,7 @@ int burg2 = 12;
 int burg3 = 11;
 int burg4 = 8;
 
-int sensorPin = 0;
+int sensorPin = A2;
 
 
 void setup() {
@@ -19,7 +19,7 @@ void setup() {
    pinMode(LED4,OUTPUT);
    Serial.begin(9600); // start serial
    
-   temp();
+   
 while (!Serial) {
     ; // wait for serial port to connect.
   }
@@ -27,7 +27,7 @@ while (!Serial) {
 }
 void loop(){
  String readString;
- 
+ temp();
   while (Serial.available()) {
     char c = Serial.read();  // reads input from serial 
     readString += c; // adds to string 
@@ -44,7 +44,6 @@ void loop(){
       indoorOn();
     }else if (readString =="insideOff"){
       indoorOff();
-  }else if(readString=="temperature"){
   }else if(readString=="alarmOn"){
     alarmOn();
   }else if (readString=="alarmOff"){
@@ -58,8 +57,7 @@ void loop(){
   }else if (readString=="Off")
   fanOff();
   }
-      temp();
-      delay(100);
+     
 
 }
 
@@ -68,18 +66,14 @@ void loop(){
 
    float temp(){
     int reading = analogRead(sensorPin);
- // measure the 5v with a meter for an accurate value
- //In particular if your Arduino is USB powered
+    //In particular if your Arduino is USB powered
  float voltage = reading * 4.68;
  voltage /= 1024.0;
  
  // now print out the temperature
  float temperatureC = (voltage - 0.5) * 100;
- Serial.print(temperatureC);
- Serial.println(" degrees C");
- 
- delay(1000);
- return temperatureC;
+    Serial.println(temperatureC);
+    delay(10000);
   }
  void lampOn(){
   digitalWrite(LED1,1);//13
