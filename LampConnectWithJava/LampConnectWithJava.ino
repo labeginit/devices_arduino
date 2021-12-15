@@ -1,4 +1,3 @@
-
 int LED1 = 13;
 int LED2 = 12;
 int LED3 = 11;
@@ -10,6 +9,8 @@ int burg3 = 11;
 int burg4 = 8;
 
 int sensorPin = A2;
+
+int inbrott = 3;
 
 
 void setup() {
@@ -26,6 +27,13 @@ while (!Serial) {
 
 }
 void loop(){
+  heatingWind();
+ //heating();
+//heatingWindOff();
+heatingOff();
+//fan();
+  
+//  inbrottOn();
  String readString;
  temp();
   while (Serial.available()) {
@@ -65,15 +73,16 @@ void loop(){
 
 
    float temp(){
-    int reading = analogRead(sensorPin);
-    //In particular if your Arduino is USB powered
- float voltage = reading * 4.68;
- voltage /= 1024.0;
- 
- // now print out the temperature
- float temperatureC = (voltage - 0.5) * 100;
-    Serial.println(temperatureC);
-    delay(10000);
+    int val = 0;
+    val = analogRead(sensorPin);
+  float mv = ( val/1024.0)*5000;
+  float cel = mv/10;
+  Serial.print("TEMPRATURE = ");
+  Serial.print(cel);
+  Serial.print("C");
+  Serial.println();
+  delay(1000);
+    delay(3000);
   }
  void lampOn(){
   digitalWrite(LED1,1);//13
@@ -136,3 +145,46 @@ void loop(){
   void fanLow(){
     analogWrite(10,90);
   }
+
+  void inbrottOn(){
+    int val = 0;
+  val = digitalRead(inbrott);
+
+    if(val == 0){
+      digitalWrite(LED1,0);//13
+    digitalWrite(LED2,1);//12
+    digitalWrite(LED3,0);//11
+    digitalWrite(LED4,0);//8
+    }else if (val == 1){
+digitalWrite(LED1,0);//13
+    digitalWrite(LED2,0);//12
+    digitalWrite(LED3,0);//11
+    digitalWrite(LED4,0);//8    
+    }
+  }
+    void heatingWind(){
+      digitalWrite(LED1,1);//13
+    digitalWrite(LED2,0);//12
+    digitalWrite(LED3,1);//11
+    digitalWrite(LED4,0);//8
+    }
+
+    void heatingWindOff(){
+      digitalWrite(LED1,1);//13
+    digitalWrite(LED2,1);//12
+    digitalWrite(LED3,1);//11
+    digitalWrite(LED4,0);//8
+    }
+     void heating(){
+      digitalWrite(LED1,1);//13
+    digitalWrite(LED2,0);//12
+    digitalWrite(LED3,0);//11
+    digitalWrite(LED4,1);//8
+    }
+
+    void heatingOff(){
+      digitalWrite(LED1,1);//13
+    digitalWrite(LED2,1);//12
+    digitalWrite(LED3,0);//11
+    digitalWrite(LED4,1);//8
+    }
